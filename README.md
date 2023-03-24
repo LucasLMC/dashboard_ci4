@@ -5,7 +5,7 @@
 - Docker
 - Docker Compose
 
-For more information about requirements [forum]( https://docs.docker.com/compose/install/ )
+For more information about requirements [docker docs]( https://docs.docker.com/compose/install/ )
 
 ## To Up Docker
 
@@ -17,4 +17,4 @@ if it doesn`t show any error run  < docker-compose up -d >
 
 Encapsulated are a php8.1 and mysql container with respective names web-1 and db-1.
 
-To know more about code-igniter access [forum](https://codeigniter.com/user_guide/index.html)
+To know more about code-igniter access [code-igniter 4 docs](https://codeigniter.com/user_guide/index.html)

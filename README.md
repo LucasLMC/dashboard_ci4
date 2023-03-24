@@ -9,6 +9,9 @@ For more information about requirements [docker docs]( https://docs.docker.com/c
 
 ## To Up Docker
 
+Rename file env to .env 
+add enviroments variables
+
 Run the command < docker-compose build >
 
 if it doesn`t show any error run  < docker-compose up -d >

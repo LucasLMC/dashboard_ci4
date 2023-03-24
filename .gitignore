@@ -1,0 +1,6 @@
+.env
+apache_log
+/system
+/tests
+/db_data
+/writable

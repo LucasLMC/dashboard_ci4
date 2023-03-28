@@ -12,7 +12,7 @@ services:
         volumes:
             - ./db_data:/usr/data
         ports:
-            - 3306:3306
+            - 3307:3306
     web:
         build:
             context: .

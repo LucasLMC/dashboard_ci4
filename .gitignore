@@ -4,3 +4,4 @@ apache_log
 /tests
 /db_data
 /writable
+/vendor

@@ -7,17 +7,15 @@ use CodeIgniter\Model;
 class UserModel extends Model
 {
     protected $table            = 'users';
-    protected $primaryKey       = 'id';
     protected $returnType       = 'object';
     protected $useSoftDeletes   = true;
-    protected $protectFields    = true;
     protected $allowedFields    = [
         'name',
         'email',
         'password',
         'reset_hash',
         'reset_hash_expiration_time',
-        'img',
+        'img_user',
     ];
 
     // Dates

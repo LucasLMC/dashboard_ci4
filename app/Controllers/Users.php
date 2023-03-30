@@ -11,12 +11,16 @@ class Users extends BaseController
 
     public function __construct()
     {
-        $db        = db_connect('default');
-        $this->userModel = model('UserModel', true, $db);
+        $this->userModel = new \App\Models\UserModel();
     }
 
     public function index()
     {
+        $data = [
+            'title' => 'Listagem de usuarios ativos'
+        ];
+
+        return view('Users/index', $data);
     }
 
     public function getUsers()
@@ -33,33 +37,23 @@ class Users extends BaseController
             'img_user',
         ];
 
-        $users = $this->userModel->select()
+        $users = $this->userModel->select($fields)
             ->findAll();
-
-        echo '</pre>';
-        print_r($users);
-        exit;
 
         $data = [];
 
         foreach ($users as $user) {
             $data[] = [
-                // 'id' => $user->id,
-                'img' => $user->img,
+                'img' => $user->img_user,
                 'name' => esc($user->name),
                 'email' => esc($user->email),
-                'active' => ($user->active == true ? 'Ativo' : '<span class="text-warning">Inativo<span/>'),
+                'active' => ($user->active == true ? '<i class="fa fa-unlock text-success"></i> Ativo ' : '<span class="text-warning"><i class="fa fa-lock"></i> Inativo <span/>'),
             ];
         }
 
         $return = [
             'data' => $data
         ];
-
-        echo '</pre>';
-        print_r($return);
-        exit;
-
 
         return  $this->response->setJSON($return);
     }

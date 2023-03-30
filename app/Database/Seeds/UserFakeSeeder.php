@@ -12,18 +12,17 @@ class UserFakeSeeder extends Seeder
 
         $faker = \Faker\Factory::create();
 
-        $qtdUsersCreated = 25;
+        $qtdUsersCreated = 10;
 
         $usersPush = [];
 
         for ($i = 0; $i < $qtdUsersCreated; $i++) {
 
             array_push($usersPush, [
-
                 'name' => $faker->unique()->name,
                 'email' => $faker->unique()->email,
                 'password' => '123456',
-                'active' => true,
+                'active' => $faker->numberBetween(0, 1)
             ]);
         }
 
@@ -31,6 +30,6 @@ class UserFakeSeeder extends Seeder
             ->protect(true)
             ->insertBatch($usersPush);
 
-        echo "$qtdUsersCreated add with success";
+        echo "$qtdUsersCreated add with success ";
     }
 }

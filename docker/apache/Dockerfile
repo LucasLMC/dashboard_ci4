@@ -1,30 +1,47 @@
-FROM php:8.1-apache
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-RUN apt-get update
-RUN apt-get install -y \
+FROM php:8.1.9-apache
+RUN echo "ServerName 127.0.0.1" >> /etc/apache2/apache2.conf
+RUN apt-get clean
+RUN apt-get update && apt-get install -y \
+    zlib1g-dev libicu-dev g++ \
+    libjpeg62-turbo-dev \
+    libzip-dev \
+    libpng-dev \
+    libwebp-dev \
+    libfreetype6-dev \
+    libxml2-dev \
     git \
     zip \
-    curl \
-    sudo \
     unzip \
-    libicu-dev \
-    libbz2-dev \
-    libpng-dev \
-    libjpeg-dev \
-    libmcrypt-dev \
-    libreadline-dev \
-    libfreetype6-dev \
-    g++
+    && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-configure gd --with-webp=/usr/include/webp --with-jpeg=/usr/include --with-freetype=/usr/include/freetype2/ \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install -j$(nproc) zip \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install intl \
+    && docker-php-ext-install mysqli
 
-RUN docker-php-ext-install \
-    bz2 \
-    intl \
-    bcmath \
-    opcache \
-    calendar \
-    pdo_mysql \
-    mysqli
 
+RUN apt-get -y install --fix-missing curl
+RUN apt-get -y install --fix-missing git
+RUN apt-get -y install --fix-missing zip unzip
+
+
+RUN apt-get install --fix-missing -y libpq-dev
+RUN apt-get install --no-install-recommends -y libpq-dev
+RUN apt-get install -y libxml2-dev libbz2-dev zlib1g-dev
+
+RUN apt-get install --fix-missing -y libsqlite3-dev \
+    libsqlite3-0 \
+    exif \
+    ftp \
+    ntp \
+    gdal-bin
+
+# ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+# RUN chmod +x /usr/local/bin/install-php-extensions && \
+#     install-php-extensions \
+#     curl fileinfo gd mbstring mysqli intl openssl pdo_mysql
+# RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli intl
 # 2. set up document root for apache
 COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
@@ -32,7 +49,6 @@ COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.con
 RUN a2enmod rewrite headers
 
 # 4. start with base php config, then add extensions
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # 5. Composer
 RUN curl -sS https://getcomposer.org/installer | php
@@ -47,5 +63,11 @@ COPY ./ /var/www/html/
 ARG uid
 RUN useradd -G www-data,root -u $uid -d /home/devuser devuser
 RUN composer install
+# RUN composer require myth/auth
 RUN mkdir -p /home/devuser/.composer && \
     chown -R devuser:devuser /home/devuser
+
+
+# COPY docker/mysql/php.ini "$PHP_INI_DIR/php.ini"
+RUN echo "mysqli.default_socket =/tmp/mysql.sock" >> "$PHP_INI_DIR/php.ini"
+# RUN echo "extension=mysqli" >> "$PHP_INI_DIR/php.ini"

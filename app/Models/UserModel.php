@@ -16,6 +16,7 @@ class UserModel extends Model
         'reset_hash',
         'reset_hash_expiration_time',
         'img_user',
+        'active'
     ];
 
     // Dates

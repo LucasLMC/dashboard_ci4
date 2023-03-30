@@ -46,7 +46,6 @@ class AddUsersTable extends Migration
             'active' => [
                 'type' => 'BOOLEAN',
                 'null' => false,
-                'default' => true
             ],
             'created_at' => [
                 'type' => 'DATETIME',

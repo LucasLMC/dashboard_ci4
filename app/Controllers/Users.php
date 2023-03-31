@@ -25,9 +25,9 @@ class Users extends BaseController
 
     public function getUsers()
     {
-        // if (!$this->request->isAJAX()) {
-        //     return redirect()->back();
-        // }
+        if (!$this->request->isAJAX()) {
+            return redirect()->back();
+        }
 
         $fields = [
             'id',
@@ -43,9 +43,12 @@ class Users extends BaseController
         $data = [];
 
         foreach ($users as $user) {
+
+            $userName = esc($user->name);
+
             $data[] = [
                 'img' => $user->img_user,
-                'name' => esc($user->name),
+                'name' => anchor("users/show/$user->id", esc($user->name), 'title="Show user ' . $userName . '"'),
                 'email' => esc($user->email),
                 'active' => ($user->active == true ? '<i class="fa fa-unlock text-success"></i> Ativo ' : '<span class="text-warning"><i class="fa fa-lock"></i> Inativo <span/>'),
             ];
@@ -56,5 +59,34 @@ class Users extends BaseController
         ];
 
         return  $this->response->setJSON($return);
+    }
+
+    public function show(int $id = null)
+    {
+        $user = $this->getUserOrNotFound($id);
+
+        $data = [
+            'title' => "Show details for user " . esc($user->name),
+            'user' => $user
+        ];
+
+        return view('Users/show', $data);
+    }
+
+
+    /**
+     * Method to get user
+     * 
+     * @param integer $id
+     * @return Exception|object
+     */
+
+    private function getUserOrNotFound(int $id = null)
+    {
+        if (!$id || !$user = $this->userModel->withDeleted(true)->find($id)) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("User $id not found");
+        }
+
+        return $user;
     }
 }

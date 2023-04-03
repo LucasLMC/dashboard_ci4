@@ -25,9 +25,9 @@ class Users extends BaseController
 
     public function getUsers()
     {
-        if (!$this->request->isAJAX()) {
-            return redirect()->back();
-        }
+        // if (!$this->request->isAJAX()) {
+        //     return redirect()->back();
+        // }
 
         $fields = [
             'id',

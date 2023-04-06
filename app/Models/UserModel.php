@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class UserModel extends Model
 {
     protected $table            = 'users';
-    protected $returnType       = 'object';
+    protected $returnType       = 'App\Entities\User';
     protected $useSoftDeletes   = true;
     protected $allowedFields    = [
         'name',
@@ -30,6 +30,16 @@ class UserModel extends Model
     protected $validationMessages   = [];
 
     // Callbacks
-    protected $beforeInsert   = [];
-    protected $beforeUpdate   = [];
+    protected $beforeInsert   = ['hashPassword'];
+    protected $beforeUpdate   = ['hashPassword'];
+
+    protected function hashPassword(array $data)
+    {
+        if (isset($data['data']['password'])) {
+            $data['data']['password'] = password_hash($data['data']['password'], PASSWORD_DEFAULT);
+            unset($data['data']['password_confirm']);
+        }
+
+        return $data;
+    }
 }

@@ -27,21 +27,16 @@
             <hr class="border-secondary">
             <h5 class="card-title mt-2"><?php echo esc($user->name); ?></h5>
             <p class="card-text">Email : <?php echo esc($user->email); ?></p>
-            <p class="card-text">Add in : <?php echo esc($user->created_at); ?></p>
-            <p class="card-text">Updated in :<?php echo esc($user->updated_at); ?></p>
+            <p class="card-text">Add in : <?php echo esc($user->created_at->humanize()); ?></p>
+            <p class="card-text">Updated in :<?php echo esc($user->updated_at->humanize()); ?></p>
             <!-- Example single danger button -->
-            <div class="btn-group">
-                <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    Action
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="<?php echo site_url("users/edituser/$user->id") ?>">Edit user</a></li>
-                    <!-- <li><a class="dropdown-item" href="<?php echo site_url("users/deletuser/$user->id") ?>">Delete user</a></li> -->
-                </ul>
-            </div>
-
+            <button type="button" href="<?php echo site_url("users/edit/$user->id") ?>" class="btn btn-danger">
+                Edit User
+            </button>
+            <button type="button" href="<?php echo site_url("users/deletuser/$user->id") ?>" class="btn btn-danger">
+                Delete User
+            </button>
             <a href="<?php echo site_url("users") ?>" class="btn btn-outline-secondary ml-2">Previous</a>
-
 
         </div>
     </div>
@@ -50,5 +45,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<?= $title; ?>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <?= $this->endSection('') ?>
